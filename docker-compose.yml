@@ -1,0 +1,45 @@
+services:
+  server:
+    build: .
+    pull_policy: build
+    ports:
+      - "22005:22005/udp"
+      - "22006:22006"
+    depends_on:
+      mariadb:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+
+  redis:
+    image: redis/redis-stack
+    healthcheck:
+      test: [ "CMD", "redis-cli", "--raw", "incr", "ping" ]
+
+  mariadb:
+    image: mariadb:latest
+    command: --default-authentication-plugin=mysql_native_password
+    restart: always
+    volumes:
+      - ./db_data:/var/lib/mysql:Z
+      - ./database:/docker-entrypoint-initdb.d
+      - ./init-mysql.sh:/docker-entrypoint-initdb.d/init-mysql.sh
+    environment:
+      MYSQL_ROOT_PASSWORD: xN0rXH7nhG
+    healthcheck:
+      test: [ "CMD-SHELL", "mariadb -u root -pxN0rXH7nhG -e 'SELECT 1'" ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  phpmyadmin:
+      image: phpmyadmin:latest
+      restart: always
+      ports:
+        - "80:80"
+      depends_on:
+        mariadb:
+          condition: service_healthy
+      environment:
+        - UPLOAD_LIMIT=6000000000
+        - PMA_HOST=mariadb
