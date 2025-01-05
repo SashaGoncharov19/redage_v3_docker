@@ -1,8 +1,8 @@
 {
   "OtherList": [],
   "Name": "MainDB",
-  "Server": "127.0.0.1",
+  "Server": "mariadb",
   "DataBase": "ra3_main",
   "User": "root",
-  "Password": "root"
+  "Password": "xN0rXH7nhG"
 }
