@@ -22,3 +22,10 @@ client_packages/main.js
 
 dlcpacks/*
 client_packages/DISABLE_ENCRYPTION_LIST
+
+.idea
+.vs
+.vscode
+
+database/init-mysql.sh
+db_data
