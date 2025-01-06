@@ -10,6 +10,8 @@ RUN cd dotnet/resources && dotnet build NeptuneEvo.sln --configuration Debug --n
 
 FROM node:16.14.0-alpine AS build-js
 
+ENV NODE_OPTIONS='--max_old_space_size=4096'
+
 WORKDIR /app
 
 COPY ./src_cef ./src_cef
